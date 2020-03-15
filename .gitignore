@@ -327,7 +327,6 @@ __pycache__/
 *.png
 *.ZEREF
 *.csv
-*.txt
 *.c
 *.mp4
 *.avi
