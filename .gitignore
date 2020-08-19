@@ -11,7 +11,8 @@
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
-
+logs/
+save/
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/
@@ -333,4 +334,5 @@ __pycache__/
 
 UTKFace/
 crop_part1/
+data_128/
 
