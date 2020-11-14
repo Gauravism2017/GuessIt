@@ -33,6 +33,9 @@ import tensorflow as tf
 baseModel = keras.applications.resnet_v2.ResNet50V2(include_top=False, weights='imagenet',
                                         input_tensor=Input(shape=(200, 200, 3)))
 
+# baseModel = tf.keras.applications.EfficientNetB7(include_top=False, weights='imagenet',
+#                                         input_tensor=Input(shape=(200, 200, 3)))
+
 ageModel = baseModel.output
 ageModel = AveragePooling2D(pool_size=(2, 2), name='agepool1')(ageModel)
 ageModel = Flatten(name="flatten_age")(ageModel)
@@ -74,7 +77,7 @@ def rmse(y_true, y_pred):
 losses = {
 	"age": rmse,
 	"ethnicity": "categorical_crossentropy",
-    "gender" : "categorical_crossentropy"
+    "gender" : "binary_crossentropy"
 }
 
 metric = {
@@ -86,13 +89,15 @@ opt = Adam(lr=1e-4)
 model.compile(loss=losses, optimizer=opt, metrics=metric)
 
 print(model.summary())
-sys.exit()
 
-gen = DataGenerator('./crop_part1/', batch_size=4)
+gen = DataGenerator(r'D:\source\sem_9\GuessIt\UTKFace\UTKFace', batch_size=32)
+val_gen = DataGenerator(r'D:\source\sem_9\GuessIt\crop_part1', batch_size=32)
 checkpoint = tf.keras.callbacks.ModelCheckpoint('./save/model.h5', verbose=0, save_best_only=True)
-tensorboard = tf.keras.callbacks.TensorBoard(log_dir='./logs', write_graph=True, write_images=False, histogram_freq=0)
+tboard_log_dir = os.path.join(".logs")
+tensorboard = tf.keras.callbacks.TensorBoard(log_dir=tboard_log_dir, write_graph=True, write_images=True, histogram_freq=0)
+tensorboard.set_model(model)
 # #model.load_weights('./save/ethnicity/model.h5')
-history = model.fit(gen, epochs=30, callbacks=[checkpoint, tensorboard])
+history = model.fit(gen, epochs=30, callbacks=[checkpoint, tensorboard], validation_data=val_gen)
 
 #history = model.fit_generator(gen)
 

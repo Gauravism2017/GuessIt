@@ -60,10 +60,10 @@ class DataGenerator(tensorflow.keras.utils.Sequence):
                 img = cv2.imread(os.path.join(self.img_dir,filename))
                 if img is not None:
                     images.append(img)
-                    age.append([max(0, int(k) - 5), int(k)+ 5])
+                    age.append([(max(0, int(k) - 5))/100, (int(k)+ 5)/100])
                     etemp.append(int(g))
                     temp.append(int(e))
-
+ 
         etemp = np.array(etemp)
         temp = np.array(temp)
         # print(etemp)
